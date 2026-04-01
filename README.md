@@ -117,12 +117,12 @@ Dashboard → MQTT Topic (robot/control or home/led) → Device → Action
 
 ##  MQTT Topics Used
 
-| Topic Name    | Description             |
-| ------------- | ----------------------- |
-| sensor/data   | Publishes sensor values |
-| home/led      | LED ON/OFF control      |
-| robot/control | Robot movement commands |
-| robot/status  | Robot action feedback   |
+| Topic Name           | Description             |
+| ---------------------| ----------------------- |
+| balaji/esp32sensor   | Publishes sensor values |
+| balaji/esp32/control | LED ON/OFF control      |
+| balaji/esp32/control | Robot movement commands |
+| balaji/esp32/robot   | Robot action feedback   |
 
 ---
 
@@ -130,7 +130,7 @@ Dashboard → MQTT Topic (robot/control or home/led) → Device → Action
 
 In addition to Node-RED and mobile app, a web-based MQTT client is used for testing and monitoring.
 
-* Web Client: HiveMQ WebSocket Client
+* Web Client: HiveMQ WebSocket Client(cloud)
 * URL: https://www.hivemq.com/demos/websocket-client/
 
 ### Configuration:
