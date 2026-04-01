@@ -1,0 +1,415 @@
+[
+    {
+        "id": "ddbcc77b5a1c5a84",
+        "type": "tab",
+        "label": "Flow 3",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "d1303d753ce86a51",
+        "type": "mqtt in",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Sensor Data",
+        "topic": "balaji/esp32/sensor",
+        "qos": "1",
+        "datatype": "json",
+        "broker": "5769ec6129ecf67b",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 210,
+        "y": 200,
+        "wires": [
+            [
+                "6dbaffc71ed35a86",
+                "9d094917ed4436ea"
+            ]
+        ]
+    },
+    {
+        "id": "5caa4fb7f61919c3",
+        "type": "function",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Extract Sensor Values",
+        "func": "// Make sure msg.payload is an object, not a string\nlet data = msg.payload;\n\n// If it’s a string, parse it first\nif (typeof data === \"string\") {\n    data = JSON.parse(data);\n}\n\nreturn [\n    { payload: data.temperature }, // output 1 → temperature gauge\n    { payload: data.humidity },    // output 2 → humidity gauge\n    { payload: data.led_state }    // output 3 → LED status text\n];",
+        "outputs": 3,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 200,
+        "wires": [
+            [
+                "bcaf1580c5c65fe5",
+                "e29ea9c9ab47f0e5"
+            ],
+            [
+                "6de9055538a2133e"
+            ],
+            [
+                "8f21d9f064a75dad"
+            ]
+        ]
+    },
+    {
+        "id": "bcaf1580c5c65fe5",
+        "type": "ui_gauge",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Temperature",
+        "group": "84283bf8b6a22e73",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temp",
+        "label": "°C",
+        "format": "{{msg.payload}}",
+        "min": 0,
+        "max": 50,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 870,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "6de9055538a2133e",
+        "type": "ui_gauge",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Humidity",
+        "group": "84283bf8b6a22e73",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "%",
+        "format": "{{msg.payload}}",
+        "min": 0,
+        "max": 100,
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 860,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "8f21d9f064a75dad",
+        "type": "ui_text",
+        "z": "ddbcc77b5a1c5a84",
+        "group": "84283bf8b6a22e73",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "LED Status",
+        "label": "LED",
+        "format": "{{msg.payload}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 870,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "8c524ea64264d6e2",
+        "type": "ui_switch",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "LED Switch",
+        "label": "LED",
+        "tooltip": "",
+        "group": "84283bf8b6a22e73",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 230,
+        "y": 320,
+        "wires": [
+            [
+                "a15750a51101d67c"
+            ]
+        ]
+    },
+    {
+        "id": "a15750a51101d67c",
+        "type": "function",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "LED ON/OFF",
+        "func": "if(msg.payload === true){\n    msg.payload = \"LED_ON\";\n} else {\n    msg.payload = \"LED_OFF\";\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 320,
+        "wires": [
+            [
+                "8674a8c46b4920e2"
+            ]
+        ]
+    },
+    {
+        "id": "9c4666e5a58a0a56",
+        "type": "ui_button",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Forward",
+        "group": "84283bf8b6a22e73",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Forward",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "FORWARD",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 230,
+        "y": 380,
+        "wires": [
+            [
+                "8674a8c46b4920e2"
+            ]
+        ]
+    },
+    {
+        "id": "72398347e25107a1",
+        "type": "ui_button",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Backward",
+        "group": "84283bf8b6a22e73",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Backward",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "BACKWARD",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 230,
+        "y": 440,
+        "wires": [
+            [
+                "8674a8c46b4920e2"
+            ]
+        ]
+    },
+    {
+        "id": "8674a8c46b4920e2",
+        "type": "mqtt out",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Send Command",
+        "topic": "balaji/esp32/control",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "mqtt_broker",
+        "x": 630,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "8e969b57703bf8a2",
+        "type": "mqtt in",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Robot Feedback",
+        "topic": "balaji/esp32/robot",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "5769ec6129ecf67b",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 230,
+        "y": 500,
+        "wires": [
+            [
+                "6587dd8f5196bf6a"
+            ]
+        ]
+    },
+    {
+        "id": "6587dd8f5196bf6a",
+        "type": "ui_template",
+        "z": "ddbcc77b5a1c5a84",
+        "group": "84283bf8b6a22e73",
+        "name": "Robot Animation",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "format": "<div style=\"position: relative; width: 300px; height: 50px; border: 1px solid #444;\">\n  <div id=\"robot\" style=\"position: absolute; width: 50px; height: 50px; background-color: red;\"></div>\n</div>\n<script>\n(function(scope) {\n    var pos = 0;\n    var step = 50;\n    var max = 250;\n    scope.$watch('msg.payload', function(payload) {\n        if(payload === \"STEP_FORWARD\"){\n            pos += step;\n            if(pos>max) pos=max;\n        } else if(payload === \"STEP_BACKWARD\"){\n            pos -= step;\n            if(pos<0) pos=0;\n        }\n        document.getElementById('robot').style.left = pos + 'px';\n    });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "className": "",
+        "x": 450,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6dbaffc71ed35a86",
+        "type": "json",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "Parse JSON",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 390,
+        "y": 200,
+        "wires": [
+            [
+                "5caa4fb7f61919c3"
+            ]
+        ]
+    },
+    {
+        "id": "9d094917ed4436ea",
+        "type": "debug",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "e29ea9c9ab47f0e5",
+        "type": "debug",
+        "z": "ddbcc77b5a1c5a84",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "5769ec6129ecf67b",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "84283bf8b6a22e73",
+        "type": "ui_group",
+        "name": "ESP32 Demo",
+        "tab": "6020af20226d600e",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Broker",
+        "broker": "broker.hivemq.com",
+        "port": "1883",
+        "clientid": "",
+        "usetls": false,
+        "compatmode": true,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    },
+    {
+        "id": "6020af20226d600e",
+        "type": "ui_tab",
+        "name": "ESP32 Control",
+        "icon": "dashboard",
+        "order": 1
+    }
+]
